@@ -16,7 +16,7 @@ const Dashboard = () => {
   const [state, setstate] = useState(false);
 
 
-  //states for updated data
+
 
   const [newdata, setnewdata] = useState({
     newname: formdata.name,
@@ -25,8 +25,7 @@ const Dashboard = () => {
   });
 
   const [editid, setid] = useState();
-  //  const [newname,setnewname]=useState(formdata.name);
-  //  const [newuname,setnewuname]=useState(formdata.username);
+
 
 
   const { data, isLoading, isFetching, isError, refetch } = useQuery({
@@ -42,7 +41,7 @@ const Dashboard = () => {
     onSuccess: () => {
       console.log("User added");
       queryClient.invalidateQueries({ queryKey: ['users'] })
-      //queryClient.setQueriesData(['users']);
+    
     },
     onError: () => {
       console.log("Error in creating user");
@@ -55,19 +54,7 @@ const Dashboard = () => {
 
   })
 
-  // const editmutation = useMutation({
-  //   mutationFn: (updatedData) => {
-  //     //console.log(updatedData.id,updatedData);
-  //     editUsers({userId :updatedData.id, ...updatedData})},
-    
-  //   onSuccess: () => {
-  //     // setformData
-  //     setformData(...formdata,
-  //       updatedData
-  //     )
-
-  //   }
-  // })
+ 
 
   const editmutation = useMutation({
     mutationFn: (updatedData) => {
@@ -168,7 +155,7 @@ const Dashboard = () => {
 
                 <button onClick={() => {
                   setid(user.id);
-                  setnewdata({ newname: user.name, newuname: user.username }); // ✅ Set the form with existing user data
+                  setnewdata({ newname: user.name, newuname: user.username }); 
                   setstate(true);
                 }} type='button'>Edit</button>
 
