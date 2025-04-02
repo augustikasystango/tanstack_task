@@ -36,7 +36,9 @@ const Dashboard = () => {
 
 
   const mutation = useMutation({
-    mutationFn: (formdata) => createUser(formdata.name, formdata.username),
+    mutationFn: (formdata) =>{
+      console.log(formdata)
+      createUser(formdata.name, formdata.username)},
     onSuccess: () => {
       console.log("User added");
       queryClient.invalidateQueries({ queryKey: ['users'] })
@@ -53,19 +55,38 @@ const Dashboard = () => {
 
   })
 
+  // const editmutation = useMutation({
+  //   mutationFn: (updatedData) => {
+  //     //console.log(updatedData.id,updatedData);
+  //     editUsers({userId :updatedData.id, ...updatedData})},
+    
+  //   onSuccess: () => {
+  //     // setformData
+  //     setformData(...formdata,
+  //       updatedData
+  //     )
+
+  //   }
+  // })
+
   const editmutation = useMutation({
     mutationFn: (updatedData) => {
-      //console.log(updatedData.id,updatedData);
-      editUsers({userId :updatedData.id, ...updatedData})},
-    
+      return editUsers(updatedData); 
+     
+    },
     onSuccess: () => {
-      // setformData
-      setformData(...formdata,
-        updatedData
-      )
-
+      console.log("User edited successfully");
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      setstate(false);  
+      setid(null);  
+      setnewdata({ newname: "", newuname: "" }); 
     }
-  })
+    ,
+    onError: () => {
+      console.log("Error updating user");
+    }
+  });
+  
 
 
   const showForm = (userId) => {
@@ -85,10 +106,17 @@ const Dashboard = () => {
             ...prev,
             newuname: e.target.value
           }))} />
-          <button type="button" onClick={() =>{
+          {/* <button type="button" onClick={() =>{
             
             console.log(userId,newdata,90)
-            editmutation.mutate(userId, newdata)}}>Save</button>
+            editmutation.mutate({ id: userId, name: newdata.newname, username: newdata.newuname });}}>Save</button> */}
+          <button type="button" onClick={() => {
+            console.log(editid, newdata, 90);
+            editmutation.mutate({ id: editid, name: newdata.newname, username: newdata.newuname });
+          }}>
+            Save
+          </button>
+
 
         </form>
       </div>
@@ -137,9 +165,16 @@ const Dashboard = () => {
                 <td>{user.username}</td>
                 <button onClick={() => deletethisuser(user.id)}>Delete</button>
 
-                <button onClick={() => { setid(user.id);
-                setstate({ showForm: true }); }} type='button'>Edit</button>
-                {(state.showForm && (user.id === editid)) ? showForm(editid) : null}
+
+                <button onClick={() => {
+                  setid(user.id);
+                  setnewdata({ newname: user.name, newuname: user.username }); // ✅ Set the form with existing user data
+                  setstate(true);
+                }} type='button'>Edit</button>
+
+
+            
+                {state && (user.id === editid) ? showForm(editid) : null}
 
               </tr>
             ))

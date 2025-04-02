@@ -22,7 +22,7 @@ const createUser=async(name,username)=>{
    console.log(username);
 
     try{
-        const resp = await axios.post(`https://67eb8191aa794fb3222a78fb.mockapi.io/users`,{name,username});
+        const resp = await axios.post(`https://67eb8191aa794fb3222a78fb.mockapi.io/users/users`,{name,username});
         
         console.log(resp.data);
         return resp.data;
@@ -44,12 +44,12 @@ const deleteUser=async(userId)=>{
 
 }
 
-const editUsers=async({userId,newdata})=>{
+const editUsers=async({ id, name, username })=>{
     
-    console.log(userId,newdata,49);
+    //console.log(id,newdata,49);
     
     try{
-        const response = await axios.put(`https://67eb8191aa794fb3222a78fb.mockapi.io/users/users/${userId}`,{newdata});
+        const response = await axios.put(`https://67eb8191aa794fb3222a78fb.mockapi.io/users/users/${id}`,   { name, username });
         console.log(response);
         return response.data;
     }catch(err){
